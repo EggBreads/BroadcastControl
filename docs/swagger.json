@@ -1,0 +1,861 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Webrtc Controller Api",
+        "title": "WebRtc Controller Swagger API",
+        "contact": {
+            "name": "API Support",
+            "email": "deuksoo.mun@catenoid.net"
+        },
+        "version": "1.0"
+    },
+    "paths": {
+        "/channel": {
+            "post": {
+                "description": "Prepare to Broadcast and Send to ready signal to nginx agent",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Broadcast"
+                ],
+                "summary": "Prepared BroadCast Channel",
+                "parameters": [
+                    {
+                        "description": "Prepare to Broadcast and Send to ready signal to nginx agent",
+                        "name": "BroadCastPrepareInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.LiveParameters"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The ChannelKey Prepared Broadcast",
+                        "schema": {
+                            "$ref": "#/definitions/models.LivePrepareSuccessRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Parameters",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "401": {
+                        "description": "Validation Authorization",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "408": {
+                        "description": "Nginx Agent Request is timeout",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "412": {
+                        "description": "All Nginx Agent Request isn't success",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "417": {
+                        "description": "Webrtc Controller Server Exception",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Send to cancel signal to nginx agent",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Broadcast"
+                ],
+                "summary": "Cancel Prepared BroadCast Channel",
+                "parameters": [
+                    {
+                        "description": "Send to cancel signal to nginx agent",
+                        "name": "BroadCastPrepareInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.LiveCancelParameters"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "The ChannelKey cancel on prepared broadcast",
+                        "schema": {
+                            "type": "null"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Parameters",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "401": {
+                        "description": "Validation Authorization",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "408": {
+                        "description": "Nginx Agent Request is timeout",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "412": {
+                        "description": "All Nginx Agent Request isn't success",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "417": {
+                        "description": "Webrtc Controller Server Exception",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    }
+                }
+            }
+        },
+        "/health": {
+            "post": {
+                "description": "Nginx Agent And Janus Agent Health Check",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Monitoring"
+                ],
+                "summary": "Nginx Agent And Janus Agent Health Check",
+                "parameters": [
+                    {
+                        "description": "Server Ip",
+                        "name": "server",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "type": "object"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "server": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Parameters",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "401": {
+                        "description": "Validation Authorization",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "417": {
+                        "description": "Health Check Process Exception",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    }
+                }
+            }
+        },
+        "/janusinfo": {
+            "get": {
+                "description": "Get to Janus Agent and Janus Turn Status Monitoring information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Monitoring"
+                ],
+                "summary": "Get Janus Monitoring information",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Parameters",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "401": {
+                        "description": "Validation Authorization",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "417": {
+                        "description": "Janus Monitoring Info got Exception",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Janus Agent and Janus Turn Status Monitoring information register",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Monitoring"
+                ],
+                "summary": "Register Janus Monitoring information",
+                "parameters": [
+                    {
+                        "description": "BroadCast is close. All Agent and live Stream Api send to broadcast close signal",
+                        "name": "BroadCastCloseInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Janus Monitoring Info registered",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Parameters",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "401": {
+                        "description": "Validation Authorization",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "417": {
+                        "description": "Janus Monitoring Info registered Exception",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    }
+                }
+            }
+        },
+        "/nginxinfo": {
+            "get": {
+                "description": "Get to Nginx Agent and Nginx Turn Status Monitoring information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Monitoring"
+                ],
+                "summary": "Get Nginx Agent Monitoring information",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Parameters",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "401": {
+                        "description": "Validation Authorization",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "417": {
+                        "description": "Nginx Monitoring Info got Exception",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Janus Agent and Janus Trun Status Monitoring information register",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Monitoring"
+                ],
+                "summary": "Register Janus Monitoring information",
+                "parameters": [
+                    {
+                        "description": "BroadCast is close. All Agent and live Stream Api send to broadcast close signal",
+                        "name": "BroadCastCloseInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.MonitoringNginxParams"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Janus Monitoring Info registered",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Parameters",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "401": {
+                        "description": "Validation Authorization",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "417": {
+                        "description": "Janus Monitoring Info registered Exception",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    }
+                }
+            }
+        },
+        "/publish": {
+            "post": {
+                "description": "BroadCast is start. All Agent and live Stream Api send to broadcast open signal",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Broadcast"
+                ],
+                "summary": "Register BroadCast",
+                "parameters": [
+                    {
+                        "description": "BroadCast is start. All Agent and live Stream Api send to broadcast open signal",
+                        "name": "BroadCastStartInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.NginxParameters"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The ChannelKey Start Broadcast",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.NginxBroadCastOpenRes"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "audio_profile": {
+                                            "allOf": [
+                                                {
+                                                    "type": "object"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "audio_bitrate": {
+                                                            "type": "integer"
+                                                        },
+                                                        "audio_codec": {
+                                                            "type": "string"
+                                                        },
+                                                        "audio_port": {
+                                                            "type": "integer"
+                                                        },
+                                                        "audio_sample_rate": {
+                                                            "type": "integer"
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        "servers": {
+                                            "type": "array",
+                                            "items": {
+                                                "allOf": [
+                                                    {
+                                                        "type": "object"
+                                                    },
+                                                    {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "ip": {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        "video_profiles": {
+                                            "type": "array",
+                                            "items": {
+                                                "allOf": [
+                                                    {
+                                                        "type": "object"
+                                                    },
+                                                    {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "video_bitrate": {
+                                                                "type": "integer"
+                                                            },
+                                                            "video_codec": {
+                                                                "type": "string"
+                                                            },
+                                                            "video_framerate": {
+                                                                "type": "integer"
+                                                            },
+                                                            "video_height": {
+                                                                "type": "integer"
+                                                            },
+                                                            "video_port": {
+                                                                "type": "integer"
+                                                            },
+                                                            "video_width": {
+                                                                "type": "integer"
+                                                            }
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Parameters",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "401": {
+                        "description": "Validation Authorization",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "412": {
+                        "description": "The response requested to another agent has failed",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "417": {
+                        "description": "Webrtc Controller Server Exception",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    }
+                }
+            }
+        },
+        "/unPublish": {
+            "post": {
+                "description": "BroadCast is close. All Agent and live Stream Api send to broadcast close signal",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Broadcast"
+                ],
+                "summary": "Close BroadCast",
+                "parameters": [
+                    {
+                        "description": "BroadCast is close. All Agent and live Stream Api send to broadcast close signal",
+                        "name": "BroadCastCloseInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.NginxBroadCastCloseReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The Broadcast success to closed",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "206": {
+                        "description": "The Broadcast is success to closed partially",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Parameters",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "401": {
+                        "description": "Validation Authorization",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "408": {
+                        "description": "Janus Agent Request is timeout",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    },
+                    "417": {
+                        "description": "Webrtc BroadcastKey wasn't deleted",
+                        "schema": {
+                            "$ref": "#/definitions/models.CommonRes"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.CommonRes": {
+            "type": "object",
+            "properties": {
+                "error_code": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.LiveCancelParameters": {
+            "type": "object",
+            "required": [
+                "channel_key",
+                "content_provider_key"
+            ],
+            "properties": {
+                "channel_key": {
+                    "type": "string"
+                },
+                "content_provider_key": {
+                    "type": "string"
+                },
+                "stream_keys": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "models.LiveParameters": {
+            "type": "object",
+            "required": [
+                "channel_key",
+                "content_provider_key",
+                "stream_keys"
+            ],
+            "properties": {
+                "channel_key": {
+                    "type": "string"
+                },
+                "content_provider_key": {
+                    "type": "string"
+                },
+                "stream_keys": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "models.LivePrepareSuccessRes": {
+            "type": "object",
+            "properties": {
+                "channel_key": {
+                    "type": "string"
+                },
+                "error_code": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "stream_keys": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "models.MonitoringNginxParams": {
+            "type": "object",
+            "properties": {
+                "common": {
+                    "$ref": "#/definitions/models.monitoringNginxCommon"
+                },
+                "nginx": {
+                    "$ref": "#/definitions/models.monitoringNginx"
+                },
+                "rtmp2rtp": {
+                    "$ref": "#/definitions/models.monitoringRtmp"
+                },
+                "server": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.NginxBroadCastCloseReq": {
+            "type": "object",
+            "required": [
+                "broadcast_key",
+                "channel_key"
+            ],
+            "properties": {
+                "broadcast_key": {
+                    "type": "string"
+                },
+                "channel_key": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.NginxBroadCastOpenRes": {
+            "type": "object",
+            "properties": {
+                "audio_profile": {
+                    "type": "object"
+                },
+                "broadcast_key": {
+                    "type": "string"
+                },
+                "channel_key": {
+                    "type": "string"
+                },
+                "client": {
+                    "type": "string"
+                },
+                "error_code": {
+                    "type": "string"
+                },
+                "listen_port": {
+                    "type": "integer"
+                },
+                "servers": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                },
+                "stream_plugin_id": {
+                    "type": "integer"
+                },
+                "video_profiles": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "models.NginxParameters": {
+            "type": "object",
+            "required": [
+                "channel_key",
+                "client",
+                "host",
+                "rtmp",
+                "server",
+                "stream_key"
+            ],
+            "properties": {
+                "broadcast_key": {
+                    "type": "string"
+                },
+                "channel_key": {
+                    "type": "string"
+                },
+                "client": {
+                    "type": "string"
+                },
+                "host": {
+                    "type": "string"
+                },
+                "record": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "rtmp": {
+                    "type": "string"
+                },
+                "server": {
+                    "type": "string"
+                },
+                "stream_key": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.monitoringNginx": {
+            "type": "object",
+            "properties": {
+                "conf_count": {
+                    "type": "integer"
+                },
+                "health_check": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "models.monitoringNginxCommon": {
+            "type": "object",
+            "properties": {
+                "cpu_num": {
+                    "type": "integer"
+                },
+                "cpu_used": {
+                    "description": "percent",
+                    "type": "integer"
+                },
+                "memory_free": {
+                    "description": "bytes",
+                    "type": "integer"
+                },
+                "memory_total": {
+                    "description": "bytes",
+                    "type": "integer"
+                }
+            }
+        },
+        "models.monitoringRtmp": {
+            "type": "object",
+            "properties": {
+                "module_count": {
+                    "type": "integer"
+                },
+                "modules": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.monitoringRtmpModules"
+                    }
+                }
+            }
+        },
+        "models.monitoringRtmpModules": {
+            "type": "object",
+            "properties": {
+                "channel": {
+                    "type": "string"
+                },
+                "targets": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.monitoringRtmpModulesTargets"
+                    }
+                }
+            }
+        },
+        "models.monitoringRtmpModulesTargets": {
+            "type": "object",
+            "properties": {
+                "audio_port": {
+                    "type": "integer"
+                },
+                "ip": {
+                    "type": "string"
+                },
+                "video_port1": {
+                    "type": "integer"
+                },
+                "video_port2": {
+                    "type": "integer"
+                },
+                "video_port3": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}

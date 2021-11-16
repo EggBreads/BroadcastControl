@@ -1,0 +1,9 @@
+vendor
+logs/*
+.idea
+config/create-sentinel-docker-compose.yml
+go.sum
+utils/logger_bak.go
+wrService/broadcast_bak
+main
+Jenkins_*

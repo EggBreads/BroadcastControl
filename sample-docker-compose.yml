@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  wrc:
+    image: mds1262/wrc:0.0.1
+    ports:
+      - "8888:8888"
+    environment:
+      - WRC_PROTOCOL=http://
+      - WRC_PRODUCT_MODE=debug
+      - WRC_PROCESS_UID=2001
+      - WRC_PROCESS_GID=2001
+      - WRC_LOG_FILE_PATH=/var/log/kollus/wrc.log
+      - WRC_LOG_LEVEL=debug
+      - WRC_AUTH_USER=kollus
+      - WRC_AUTH_PASS=0catenoid
+      - WRC_SENTINEL_MASTER_NAME=webrtcMaster
+      - WRC_SENTINEL_HOST=182.252.140.200
+      - WRC_SENTINEL_PORT=46379
+      - WRC_LIVE_API_HOST=http://127.0.0.1:3001/
+      - WRC_STREAM_PLUGIN_ID_KEY=webrtc_stream_port_manage
+      - WRC_JANUS_SERVER_INFO_KEY=webrtc_janus_server_info
+      - WRC_NGINX_SERVER_INFO_KEY=webrtc_nginx_server_info
+      - WRC_JANUS_HEALTH_CHECK_IS_USE=false
+      - WRC_JANUS_HEALTH_CHECK_TIME=1
+      - WRC_THREAD_TIMEOUT=180
+      - WRC_CLIENT_TIMEOUT=30
+      - WRC_ALLOW_LIMIT_TIME_TERM=60
+      - WRC_BROADCAST_MODE=test

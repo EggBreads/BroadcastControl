@@ -1,0 +1,69 @@
+ pipeline {
+   agent any
+
+   tools {go "go1.17"}
+
+   environment {
+           GO111MODULE = "on"
+           GOOS = "linux"
+           GOARCH = "amd64"
+           CGO_ENABLED = 0
+           registryCredential = 'DockerHub'
+   }
+   stages {
+        stage('GO-VERSION') {
+            steps{
+                sh 'go version'
+                sh 'docker'
+                hangoutsNotify message: "Start jenkins build (${env.BUILD_ID}_${env.JOB_NAME}_${env.BUILD_TAG}_${env.BUILD_URL})",token: "nvo_bc98ecSPG02ey4V7SwUay",threadByJob: false
+            }
+        }//stage
+
+        stage('GO-BUILD') {
+            steps{
+                echo "Download vendor"
+                sh "go mod vendor"
+
+                echo "Start Go Build"
+                sh "go build -a -ldflags '-w -s' -o main main.go"
+
+                echo "Finish Go Build"
+            }
+        }//stage
+
+        stage('DOCKER-IMAGE-BUILD') {
+            steps{
+                echo "Start Docker Image Build"
+                sh "docker build -f Dockerfile --no-cache=true --tag docker-kr.kollus.com/kollus/wrc:${IMAGE_VERSION} ."
+                echo "Finish Docker Image Build"
+            }
+        }//stage
+
+        stage('DOCKER-IMAGE-PUSH') {
+            steps{
+                echo "Start Docker Image Push"
+                withDockerRegistry([ credentialsId: registryCredential, url: "" ]) {
+                                    sh 'docker push docker-kr.kollus.com/kollus/wrc:${IMAGE_VERSION}'
+                                }
+                echo "Finish Docker Image Push"
+            }
+        }//stage
+
+        stage('Rancher Run') {
+           steps {
+             rancher(environmentId: '1a9', endpoint: 'http://182.252.181.59:8080/v2-beta', service: 'Webrtc-Controller/webrtc-control', image: 'docker-kr.kollus.com/kollus/wrc:${IMAGE_VERSION}', confirm: true, startFirst: false, timeout: 1000, environments: '', ports: '', credentialId: 'dev-rancher')
+           }//steps
+        }//stage
+
+    }//stages
+
+    post {
+           success {
+                slackSend channel: 'dev-jenkins', color: 'good', message: "Success to jenkins build (${env.BUILD_ID}_${env.JOB_NAME}_${env.BUILD_TAG}_${env.BUILD_URL})", teamDomain: 'catenoid-dev', tokenCredentialId: 'slack-dev'
+           }//success
+
+           failure {
+                slackSend channel: 'dev-jenkins', color: 'danger', message: "Fault to jenkins build (${env.BUILD_ID}_${env.JOB_NAME}_${env.BUILD_TAG}_${env.BUILD_URL})", teamDomain: 'catenoid-dev', tokenCredentialId: 'slack-dev'
+           }//success
+    }//post
+ }//pipeline

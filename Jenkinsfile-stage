@@ -15,7 +15,7 @@
             steps{
                 sh 'go version'
                 sh 'docker'
-                hangoutsNotify message: "Start jenkins build (${env.BUILD_ID}_${env.JOB_NAME}_${env.BUILD_TAG}_${env.BUILD_URL})",token: "nvo_bc98ecSPG02ey4V7SwUay",threadByJob: false
+                hangoutsNotify message: "Start jenkins build (${env.BUILD_ID}_${env.JOB_NAME}_${env.BUILD_TAG}_${env.BUILD_URL})",token: $Token,threadByJob: false
             }
         }//stage
 
